@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	"github.com/metacubex/ssh"
+	"github.com/metacubex/ssh/internal/testenv"
 	"github.com/metacubex/ssh/testdata"
-	"golang.org/x/crypto/internal/testenv"
 )
 
 // unixConnection creates two halves of a connected net.UnixConn.  It

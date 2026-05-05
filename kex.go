@@ -8,14 +8,12 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
-	"crypto/fips140"
 	"crypto/rand"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
 	"math/big"
-	"slices"
 
 	"golang.org/x/crypto/curve25519"
 )
@@ -409,14 +407,6 @@ func init() {
 	kexAlgoMap[KeyExchangeECDHP521] = &ecdh{elliptic.P521()}
 	kexAlgoMap[KeyExchangeECDHP384] = &ecdh{elliptic.P384()}
 	kexAlgoMap[KeyExchangeECDHP256] = &ecdh{elliptic.P256()}
-
-	if fips140.Enabled() {
-		defaultKexAlgos = slices.DeleteFunc(defaultKexAlgos, func(algo string) bool {
-			_, ok := kexAlgoMap[algo]
-			return !ok
-		})
-		return
-	}
 
 	p, _ := new(big.Int).SetString(oakleyGroup2, 16)
 	kexAlgoMap[InsecureKeyExchangeDH1SHA1] = &dhGroup{

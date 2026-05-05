@@ -10,9 +10,10 @@ import (
 	"io"
 	"log"
 	"net"
-	"slices"
 	"strings"
 	"sync"
+
+	"golang.org/x/exp/slices"
 )
 
 // debugHandshake, if set, prints messages sent and received.  Key

@@ -5,10 +5,11 @@
 package ssh
 
 import (
-	"maps"
 	"reflect"
-	"slices"
 	"testing"
+
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 )
 
 func TestFindAgreedAlgorithms(t *testing.T) {
@@ -181,7 +182,7 @@ func TestKeyFormatAlgorithms(t *testing.T) {
 	supportedAlgos := SupportedAlgorithms()
 	insecureAlgos := InsecureAlgorithms()
 	algoritms := append(supportedAlgos.PublicKeyAuths, insecureAlgos.PublicKeyAuths...)
-	algoritms = append(algoritms, slices.Collect(maps.Keys(certKeyAlgoNames))...)
+	algoritms = append(algoritms, maps.Keys(certKeyAlgoNames)...)
 
 	for _, algo := range algoritms {
 		keyFormat := keyFormatForAlgorithm(algo)

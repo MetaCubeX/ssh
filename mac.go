@@ -7,13 +7,11 @@ package ssh
 // Message authentication support
 
 import (
-	"crypto/fips140"
 	"crypto/hmac"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"hash"
-	"slices"
 )
 
 type macMode struct {
@@ -66,15 +64,6 @@ func init() {
 	macModes[HMACSHA256] = &macMode{32, false, func(key []byte) hash.Hash {
 		return hmac.New(sha256.New, key)
 	}}
-
-	if fips140.Enabled() {
-		defaultMACs = slices.DeleteFunc(defaultMACs, func(algo string) bool {
-			_, ok := macModes[algo]
-			return !ok
-		})
-		return
-	}
-
 	macModes[HMACSHA1] = &macMode{20, false, func(key []byte) hash.Hash {
 		return hmac.New(sha1.New, key)
 	}}

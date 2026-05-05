@@ -14,9 +14,10 @@ import (
 	"net"
 	"os"
 	"runtime"
-	"slices"
 	"strings"
 	"testing"
+
+	"golang.org/x/exp/slices"
 )
 
 type keyboardInteractive map[string]string

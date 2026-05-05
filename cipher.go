@@ -8,7 +8,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/des"
-	"crypto/fips140"
 	"crypto/rc4"
 	"crypto/subtle"
 	"encoding/binary"
@@ -16,10 +15,10 @@ import (
 	"fmt"
 	"hash"
 	"io"
-	"slices"
+
+	"github.com/metacubex/ssh/internal/poly1305"
 
 	"golang.org/x/crypto/chacha20"
-	"golang.org/x/crypto/internal/poly1305"
 )
 
 const (
@@ -109,14 +108,6 @@ func init() {
 	// For now it means we'll work with fips140=on but not fips140=only.
 	cipherModes[CipherAES128GCM] = &cipherMode{16, 12, newGCMCipher}
 	cipherModes[CipherAES256GCM] = &cipherMode{32, 12, newGCMCipher}
-
-	if fips140.Enabled() {
-		defaultCiphers = slices.DeleteFunc(defaultCiphers, func(algo string) bool {
-			_, ok := cipherModes[algo]
-			return !ok
-		})
-		return
-	}
 
 	cipherModes[CipherChaCha20Poly1305] = &cipherMode{64, 0, newChaCha20Cipher}
 	// Insecure ciphers not included in the default configuration.

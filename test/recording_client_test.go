@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/metacubex/ssh"
+	"github.com/metacubex/ssh/internal/testenv"
 	"github.com/metacubex/ssh/testdata"
-	"golang.org/x/crypto/internal/testenv"
 )
 
 // serverPort contains the port that OpenSSH will listen on. OpenSSH can't take

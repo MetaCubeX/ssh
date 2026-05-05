@@ -6,12 +6,12 @@ package ssh
 
 import (
 	"crypto"
-	"crypto/mlkem"
 	"crypto/sha256"
 	"errors"
 	"fmt"
 	"io"
 
+	"github.com/metacubex/ssh/internal/mlkem"
 	"golang.org/x/crypto/curve25519"
 )
 

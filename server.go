@@ -10,8 +10,9 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"slices"
 	"strings"
+
+	"golang.org/x/exp/slices"
 )
 
 // The Permissions type holds fine-grained permissions that are

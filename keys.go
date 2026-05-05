@@ -27,10 +27,11 @@ import (
 	"fmt"
 	"io"
 	"math/big"
-	"slices"
 	"strings"
 
 	"github.com/metacubex/ssh/internal/bcrypt_pbkdf"
+
+	"golang.org/x/exp/slices"
 )
 
 // Public key algorithms names. These values can appear in PublicKey.Type,

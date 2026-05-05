@@ -19,7 +19,7 @@ import (
 	"sync"
 
 	"github.com/metacubex/ssh"
-	"github.com/metacubex/ssh/terminal"
+	"golang.org/x/term"
 )
 
 func ExampleNewServerConn() {
@@ -135,7 +135,7 @@ func ExampleNewServerConn() {
 			wg.Done()
 		}(requests)
 
-		term := terminal.NewTerminal(channel, "> ")
+		term := term.NewTerminal(channel, "> ")
 
 		wg.Add(1)
 		go func() {

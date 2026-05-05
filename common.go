@@ -6,17 +6,17 @@ package ssh
 
 import (
 	"crypto"
-	"crypto/fips140"
 	"crypto/rand"
 	"fmt"
 	"io"
 	"math"
-	"slices"
 	"sync"
 
 	_ "crypto/sha1"
 	_ "crypto/sha256"
 	_ "crypto/sha512"
+
+	"golang.org/x/exp/slices"
 )
 
 // These are string constants in the SSH protocol.
@@ -257,19 +257,6 @@ type Algorithms struct {
 	PublicKeyAuths []string
 }
 
-func init() {
-	if fips140.Enabled() {
-		defaultHostKeyAlgos = slices.DeleteFunc(defaultHostKeyAlgos, func(algo string) bool {
-			_, err := hashFunc(underlyingAlgo(algo))
-			return err != nil
-		})
-		defaultPubKeyAuthAlgos = slices.DeleteFunc(defaultPubKeyAuthAlgos, func(algo string) bool {
-			_, err := hashFunc(underlyingAlgo(algo))
-			return err != nil
-		})
-	}
-}
-
 func hashFunc(format string) (crypto.Hash, error) {
 	switch format {
 	case KeyAlgoRSASHA256, KeyAlgoECDSA256, KeyAlgoSKED25519, KeyAlgoSKECDSA256:
@@ -282,9 +269,6 @@ func hashFunc(format string) (crypto.Hash, error) {
 		// KeyAlgoED25519 doesn't pre-hash.
 		return 0, nil
 	case KeyAlgoRSA, InsecureKeyAlgoDSA:
-		if fips140.Enabled() {
-			return 0, fmt.Errorf("ssh: hash algorithm for format %q not allowed in FIPS 140 mode", format)
-		}
 		return crypto.SHA1, nil
 	default:
 		return 0, fmt.Errorf("ssh: hash algorithm for format %q not mapped", format)

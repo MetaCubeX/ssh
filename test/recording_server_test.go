@@ -18,8 +18,8 @@ import (
 	"time"
 
 	"github.com/metacubex/ssh"
+	"github.com/metacubex/ssh/internal/testenv"
 	"github.com/metacubex/ssh/testdata"
-	"golang.org/x/crypto/internal/testenv"
 )
 
 type serverTest struct {
