@@ -9,6 +9,7 @@ import (
 	"math/big"
 	"math/rand"
 	"reflect"
+	"strings"
 	"testing"
 	"testing/quick"
 )
@@ -259,6 +260,31 @@ func TestDecode(t *testing.T) {
 		t.Errorf("error decoding userAuthSuccessMsg")
 	} else if _, ok := userAuthSuccess.(*userAuthSuccessMsg); !ok {
 		t.Errorf("error decoding userAuthSuccessMsg, unexpected %T", userAuthSuccess)
+	}
+}
+
+func TestDisconnectMsgSanitizesMessage(t *testing.T) {
+	for _, tc := range []struct {
+		in   string
+		want string
+	}{
+		{"clean message", `"clean message"`},
+		{"line1\nline2\nline3", `"line1line2line3"`},
+		{"has\x00null\x00bytes", `"hasnullbytes"`},
+		{"\x1b[31mred\x1b[0m", `"[31mred[0m"`},
+		{"newline\r\nCRLF", `"newlineCRLF"`},
+		{"tab\there", `"tab\there"`},
+	} {
+		t.Run(tc.in, func(t *testing.T) {
+			d := &disconnectMsg{Reason: 11, Message: tc.in}
+			got := d.Error()
+			if !strings.Contains(got, tc.want) {
+				t.Errorf("got %q, want %q", got, tc.want)
+			}
+			if bad := "\n\r\x00\x1b"; strings.ContainsAny(got, bad) {
+				t.Errorf("got %q, want none of %q", got, bad)
+			}
+		})
 	}
 }
 
