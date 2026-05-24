@@ -77,7 +77,7 @@ func parsePubKey(in []byte, algo string) (pubKey PublicKey, rest []byte, err err
 	case InsecureKeyAlgoDSA:
 		return parseDSA(in)
 	case KeyAlgoECDSA256, KeyAlgoECDSA384, KeyAlgoECDSA521:
-		return parseECDSA(in)
+		return parseECDSA(in, algo)
 	case KeyAlgoSKECDSA256:
 		return parseSKECDSA(in)
 	case KeyAlgoED25519:
@@ -807,7 +807,7 @@ func supportedEllipticCurve(curve elliptic.Curve) bool {
 }
 
 // parseECDSA parses an ECDSA key according to RFC 5656, section 3.1.
-func parseECDSA(in []byte) (out PublicKey, rest []byte, err error) {
+func parseECDSA(in []byte, expectedType string) (out PublicKey, rest []byte, err error) {
 	var w struct {
 		Curve    string
 		KeyBytes []byte
@@ -816,6 +816,12 @@ func parseECDSA(in []byte) (out PublicKey, rest []byte, err error) {
 
 	if err := Unmarshal(in, &w); err != nil {
 		return nil, nil, err
+	}
+
+	actualType := "ecdsa-sha2-" + w.Curve
+	if expectedType != actualType {
+		return nil, nil, fmt.Errorf("ssh: algorithm type mismatch: expected %q, found curve %q (type %q)",
+			expectedType, w.Curve, actualType)
 	}
 
 	key := new(ecdsa.PublicKey)
