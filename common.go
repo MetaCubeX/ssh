@@ -528,7 +528,7 @@ func (c *Config) SetDefaults() {
 	if c.Rand == nil {
 		c.Rand = rand.Reader
 	}
-	if c.Ciphers == nil {
+	if len(c.Ciphers) == 0 {
 		c.Ciphers = defaultCiphers
 	}
 	var ciphers []string
@@ -540,7 +540,7 @@ func (c *Config) SetDefaults() {
 	}
 	c.Ciphers = ciphers
 
-	if c.KeyExchanges == nil {
+	if len(c.KeyExchanges) == 0 {
 		c.KeyExchanges = defaultKexAlgos
 	}
 	var kexs []string
@@ -555,7 +555,7 @@ func (c *Config) SetDefaults() {
 	}
 	c.KeyExchanges = kexs
 
-	if c.MACs == nil {
+	if len(c.MACs) == 0 {
 		c.MACs = defaultMACs
 	}
 	var macs []string
