@@ -4,4 +4,4 @@
 backport ssh for go1.20+
 
 export `x/crypto/ssh` from:
-https://github.com/golang/crypto/tree/8400f4a938077a7a7817ab7d163d148e371b320b/ssh
+https://github.com/golang/crypto/tree/71488c48c2dfecf900e52caa55f88ef4fef62d54/ssh
